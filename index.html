@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roxy Games</title>
+  <link rel="stylesheet" href="/style.css?v=48">
+</head>
+<body>
+  <!-- Every page of Roxy Games is in this one file. Each <template> below belongs to
+       the pages named in its data-page; site.js puts in the ones for the address you're
+       on (/, /games, /play, /chat, /ai, /login, /account, /banned, /staff). -->
+
+  <!-- Animated network background -->
+  <canvas id="bg"></canvas>
+
+  <!-- Custom cursor: dot with a ring around it -->
+  <div class="cursor-ring" id="cursorRing"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
+
+  <!-- ===== Header tabs + staff notepad (main pages) ===== -->
+  <template data-page="home games play chat ai">
+    <header class="site-header">
+      <nav class="tabs">
+        <a href="/" class="tab" data-tab="home">HOME</a>
+        <a href="/games" class="tab" data-tab="games">GAMES</a>
+        <a href="/chat" class="tab" data-tab="chat">CHAT</a>
+        <a href="/ai" class="tab" data-tab="ai">AI</a>
+      </nav>
+    </header>
+
+    <!-- Top-right corner: account button (added by site.js) and staff notepad -->
+    <div class="top-right">
+      <a href="/staff" class="icon-btn staff-btn" aria-label="Staff Panel" title="Staff Panel">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="5" y="4" width="14" height="17" rx="2"/>
+          <path d="M8.5 2.5v3M12 2.5v3M15.5 2.5v3"/>
+          <path d="M8 10h8M8 13.5h8M8 17h5"/>
+        </svg>
+      </a>
+    </div>
+  </template>
+
+  <!-- ===== Exit door: back to the front page (account settings + staff panel) ===== -->
+  <template data-page="account staff">
+    <a href="/" class="icon-btn exit-btn" aria-label="Exit to front page" title="Exit">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M13 4H6a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h7"/>
+        <path d="M13 4v16"/>
+        <path d="M16 12h6M19 9l3 3-3 3"/>
+      </svg>
+    </a>
+  </template>
+
+  <!-- ===== Home ===== -->
+  <template data-page="home">
+    <main>
+      <section class="hero">
+        <h1>Roxy Games</h1>
+        <p class="byline">Made by Roxy Illustrations</p>
+      </section>
+
+      <div class="clock">
+        <div class="clock-time" id="clockTime"></div>
+        <div class="clock-date" id="clockDate"></div>
+      </div>
+    </main>
+
+    <footer class="copyright"><span class="copy-symbol">&copy;</span> 2026 Roxy Illustrations, Copying is not permitted.</footer>
+  </template>
+
+  <!-- ===== Games ===== -->
+  <template data-page="games">
+    <main>
+      <section class="hero hero-small">
+        <h1>Games</h1>
+      </section>
+
+      <div class="library">
+        <nav class="tabs categories" id="categories"></nav>
+        <div id="gameSections"></div>
+      </div>
+    </main>
+  </template>
+
+  <!-- ===== Play (one game) ===== -->
+  <template data-page="play">
+    <main class="player">
+      <a href="/games" class="back-link">&larr; All games</a>
+      <h1 class="player-title" id="gameTitle">Game</h1>
+
+      <div class="player-frame" id="playerFrame">
+        <div class="player-empty" id="playerEmpty" hidden>This game hasn't been added yet.</div>
+      </div>
+
+      <div class="player-bar">
+        <div class="tabs">
+          <button class="tab vote" id="likeBtn" aria-pressed="false" aria-label="Like">
+            <svg viewBox="0 0 24 24"><path d="M2 21h4V9H2v12zm20-11a2 2 0 0 0-2-2h-6.3l1-4.6v-.3a1.5 1.5 0 0 0-.4-1L13.2 1 6.6 7.6A2 2 0 0 0 6 9v10a2 2 0 0 0 2 2h9a2 2 0 0 0 1.8-1.2l3-7.1c.1-.2.2-.5.2-.7v-2z"/></svg>
+            LIKE
+          </button>
+          <button class="tab vote" id="dislikeBtn" aria-pressed="false" aria-label="Dislike">
+            <svg viewBox="0 0 24 24"><path d="M22 3h-4v12h4V3zM2 14a2 2 0 0 0 2 2h6.3l-1 4.6v.3c0 .4.2.8.4 1l1.1 1.1 6.6-6.6A2 2 0 0 0 18 15V5a2 2 0 0 0-2-2H7a2 2 0 0 0-1.8 1.2l-3 7.1c-.1.2-.2.5-.2.7v2z"/></svg>
+            DISLIKE
+          </button>
+        </div>
+        <button class="tab fullscreen-btn" id="fullscreenBtn">
+          <svg viewBox="0 0 24 24"><path d="M4 4h6v2H6v4H4V4zm10 0h6v6h-2V6h-4V4zM4 14h2v4h4v2H4v-6zm14 0h2v6h-6v-2h4v-4z"/></svg>
+          FULLSCREEN
+        </button>
+      </div>
+    </main>
+  </template>
+
+  <!-- ===== Chat ===== -->
+  <template data-page="chat">
+    <main>
+      <section class="chat-page">
+        <h1>Live Chat</h1>
+
+        <div class="chat-box">
+          <div class="chat-messages" id="chatMessages" aria-live="polite"></div>
+
+          <form class="chat-form" id="chatForm" autocomplete="off">
+            <input type="text" id="chatInput" placeholder="Say something nice..." maxlength="300" aria-label="Message">
+            <button type="submit" class="button small">Send</button>
+          </form>
+          <p class="staff-error chat-error" id="chatError" role="alert"></p>
+        </div>
+      </section>
+    </main>
+
+    <!-- Report a message -->
+    <div class="modal-backdrop" id="reportModal" hidden>
+      <form class="modal-box" id="reportForm">
+        <h2 id="reportTitle">Report message</h2>
+        <blockquote class="mod-quote" id="reportQuote"></blockquote>
+        <div class="login-form">
+          <label for="reportReason">Why are you reporting it? (optional)</label>
+          <input type="text" id="reportReason" maxlength="200" placeholder="e.g. mean words, spam" autocomplete="off">
+        </div>
+        <p class="staff-error" id="reportError" role="alert"></p>
+        <div class="modal-actions">
+          <button type="button" class="tab" id="reportCancel">CANCEL</button>
+          <button type="submit" class="button small danger">Report</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Small pop-up message at the bottom of the screen -->
+    <div class="toast" id="toast" role="status"></div>
+  </template>
+
+  <!-- ===== AI ===== -->
+  <template data-page="ai">
+    <main>
+      <section class="chat-page">
+        <h1>Ask Claude</h1>
+        <p class="ai-note">Your own private chat with Claude, an AI made by Anthropic. It isn't saved: closing or reloading the tab clears it.</p>
+
+        <!-- Shown while the AI isn't switched on yet (see AI_READY in site.js) -->
+        <div class="ai-soon" id="aiSoon" hidden>
+          <div class="ai-soon-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9z" fill="currentColor"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z" fill="currentColor"/></svg>
+          </div>
+          <h2>Coming Soon</h2>
+          <p>Our AI helper is still being built. Check back later to chat with it, ask questions and share pictures!</p>
+          <a href="/games" class="button small">Play some games</a>
+        </div>
+
+        <div class="chat-box">
+          <div class="chat-messages" id="aiMessages" aria-live="polite"></div>
+
+          <!-- Picture waiting to be sent -->
+          <div class="ai-preview" id="aiPreview" hidden>
+            <img id="aiPreviewImg" alt="Picture to send">
+            <button type="button" class="ai-preview-remove" id="aiPreviewRemove" aria-label="Remove picture" title="Remove picture">&times;</button>
+          </div>
+
+          <form class="chat-form" id="aiForm" autocomplete="off">
+            <button type="button" class="tab ai-new" id="aiNew" title="Start a new chat">NEW CHAT</button>
+            <button type="button" class="tab ai-attach" id="aiAttach" aria-label="Add a picture" title="Add a picture (or paste one)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></svg>
+            </button>
+            <input type="file" id="aiFile" accept="image/*" hidden>
+            <input type="text" id="aiInput" placeholder="Ask me anything, or add a picture..." maxlength="1000" aria-label="Message to Claude">
+            <button type="submit" class="button small">Send</button>
+          </form>
+          <p class="staff-error chat-error" id="aiError" role="alert"></p>
+        </div>
+      </section>
+    </main>
+  </template>
+
+  <!-- ===== Sign in ===== -->
+  <template data-page="login">
+    <!-- Back button (shown on the rules screen): returns to sign in, like the staff panel's exit door -->
+    <button type="button" class="icon-btn exit-btn" id="rulesBack" aria-label="Back to sign in" title="Back to sign in" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M11 4h7a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-7"/>
+        <path d="M11 4v16"/>
+        <path d="M8 12H2M5 9l-3 3 3 3"/>
+      </svg>
+    </button>
+
+    <!-- Rule book tab on the side of the sign-in screen -->
+    <button type="button" class="rulebook-tab" id="rulesOpen" aria-label="Read the rules">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/>
+        <path d="M4 21V5M8 7h7M8 11h5"/>
+      </svg>
+      <span>RULES</span>
+    </button>
+
+    <main>
+      <section class="login-box" id="loginView">
+        <h1>Roxy Games</h1>
+        <p class="login-tagline">Sign in to start playing.</p>
+
+        <div class="login-card">
+          <!-- Switch between signing in and making a new account -->
+          <div class="tabs login-tabs">
+            <button type="button" class="tab active" data-mode="signin">SIGN IN</button>
+            <button type="button" class="tab" data-mode="signup">CREATE ACCOUNT</button>
+          </div>
+
+          <form class="login-form" id="loginForm">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="3-20 letters, numbers or _" maxlength="20" autocomplete="username" required>
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="At least 4 characters" autocomplete="current-password" required>
+            <button type="submit" class="button" id="loginSubmit">Sign in</button>
+            <p class="staff-error" id="loginError" role="alert"></p>
+          </form>
+
+          <p class="login-small">By signing in you agree to the <button type="button" class="link-btn" id="rulesLink">rules</button>. You'll stay signed in on this device.</p>
+        </div>
+      </section>
+
+      <!-- Rule book: shown when the rules tab is clicked -->
+      <section class="login-box rulebook" id="rulesView" hidden>
+        <h1>Rule Book</h1>
+        <ol class="rules-list">
+          <li><strong>Be kind.</strong> No bullying, hate, or racist and hurtful words.</li>
+          <li><strong>Keep usernames clean.</strong> Names with bad words or slurs are blocked.</li>
+          <li><strong>Respect Roxy Games.</strong> Names like "Roxy Games Sucks" aren't allowed.</li>
+          <li><strong>Keep your password secret.</strong> Don't share it, even with friends.</li>
+          <li><strong>Be yourself.</strong> Don't pretend to be someone else or a staff member.</li>
+          <li><strong>Play fair.</strong> No cheating. If you find a bug, tell staff.</li>
+          <li><strong>Have fun!</strong></li>
+        </ol>
+        <button type="button" class="button" id="rulesDone">Back to sign in</button>
+      </section>
+    </main>
+  </template>
+
+  <!-- ===== Account settings ===== -->
+  <template data-page="account">
+    <main>
+      <section class="login-box account-page">
+        <h1>Account</h1>
+        <!-- Your username with your role badge -->
+        <p class="profile-name" id="profileName"></p>
+
+        <!-- Profile picture -->
+        <div class="login-card">
+          <h2 class="card-title">Profile picture</h2>
+          <div class="pfp-row">
+            <div class="pfp-preview" id="pfpPreview"></div>
+            <div class="pfp-buttons">
+              <label class="button small" for="pfpFile">Upload picture</label>
+              <input type="file" id="pfpFile" accept="image/*" hidden>
+              <button type="button" class="tab" id="pfpRemove">REMOVE</button>
+            </div>
+          </div>
+          <p class="staff-error" id="pfpMsg" role="alert"></p>
+        </div>
+
+        <!-- Username -->
+        <div class="login-card">
+          <h2 class="card-title">Username</h2>
+          <form class="login-form" id="nameForm">
+            <label for="newName">New username</label>
+            <input type="text" id="newName" placeholder="3-20 letters, numbers or _" maxlength="20" autocomplete="username" required>
+            <button type="submit" class="button">Change username</button>
+            <p class="staff-error" id="nameMsg" role="alert"></p>
+          </form>
+        </div>
+
+        <!-- Password -->
+        <div class="login-card">
+          <h2 class="card-title">Password</h2>
+          <form class="login-form" id="passForm">
+            <label for="currentPass">Current password</label>
+            <input type="password" id="currentPass" autocomplete="current-password" required>
+            <label for="newPass">New password</label>
+            <input type="password" id="newPass" placeholder="At least 4 characters" autocomplete="new-password" required>
+            <label for="confirmPass">Type the new password again</label>
+            <input type="password" id="confirmPass" autocomplete="new-password" required>
+            <button type="submit" class="button">Change password</button>
+            <p class="staff-error" id="passMsg" role="alert"></p>
+          </form>
+        </div>
+      </section>
+    </main>
+  </template>
+
+  <!-- ===== Ban / timeout screen ===== -->
+  <template data-page="banned">
+    <main>
+      <section class="login-box ban-box">
+        <div class="ban-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M5.6 5.6l12.8 12.8"/>
+          </svg>
+        </div>
+        <h1 id="banTitle">You're Banned</h1>
+        <p class="ban-name" id="banName"></p>
+
+        <div class="login-card ban-card">
+          <div class="ban-row">
+            <span>Reason</span>
+            <strong id="banReason"></strong>
+          </div>
+          <div class="ban-row" id="banWhenRow">
+            <span id="banWhenLabel">Banned on</span>
+            <strong id="banWhen"></strong>
+          </div>
+          <div class="ban-row" id="banLeftRow" hidden>
+            <span>Time left</span>
+            <strong id="banLeft"></strong>
+          </div>
+        </div>
+
+        <p class="login-small" id="banHelp">If you think this is a mistake, talk to a staff member.</p>
+        <p class="staff-error ok" id="banDone" role="status"></p>
+      </section>
+    </main>
+  </template>
+
+  <!-- ===== Staff Panel ===== -->
+  <template data-page="staff">
+    <main>
+      <!-- Shown to people without a staff role -->
+      <section class="staff-login" id="staffOnly" hidden>
+        <h1>Staff Panel</h1>
+        <p class="staff-only-text">Only staff can open the Staff Panel.</p>
+        <a href="/" class="button small">Back to Roxy Games</a>
+      </section>
+
+      <!-- Code entry (checked by the server, together with your staff role) -->
+      <form class="staff-login" id="staffLogin" autocomplete="off">
+        <h1>Staff Panel</h1>
+        <input type="password" id="staffCode" maxlength="4" placeholder="&bull;&bull;&bull;&bull;" aria-label="Staff code" readonly>
+
+        <div class="keypad" id="keypad">
+          <button type="button" data-key="1">1</button>
+          <button type="button" data-key="2">2</button>
+          <button type="button" data-key="3">3</button>
+          <button type="button" data-key="4">4</button>
+          <button type="button" data-key="5">5</button>
+          <button type="button" data-key="6">6</button>
+          <button type="button" data-key="7">7</button>
+          <button type="button" data-key="8">8</button>
+          <button type="button" data-key="9">9</button>
+          <button type="button" data-key="clear" class="key-small" aria-label="Clear">C</button>
+          <button type="button" data-key="0">0</button>
+          <button type="button" data-key="back" class="key-small" aria-label="Delete">&#9003;</button>
+        </div>
+        <p class="staff-error" id="staffError" aria-live="polite"></p>
+      </form>
+
+      <!-- Shown after the right code (staff only) -->
+      <section class="staff-panel" id="staffPanel" hidden>
+        <h1>Staff Panel</h1>
+
+        <!-- Tabs, like the ones on the main screen -->
+        <nav class="tabs staff-tabs" id="staffTabs">
+          <button type="button" class="tab active" data-view="users">USERS</button>
+          <button type="button" class="tab" data-view="reports">REPORTS/BANS</button>
+          <button type="button" class="tab" data-view="broadcasts">BROADCASTS</button>
+          <button type="button" class="tab" data-view="abuse" id="abuseTab">ADMIN ABUSE</button>
+        </nav>
+
+        <!-- Users: every account, with staff actions -->
+        <div class="staff-view" data-view="users">
+          <div class="users-bar">
+            <input type="search" id="userSearch" placeholder="Search users" aria-label="Search users">
+            <span class="users-count" id="userCount"></span>
+          </div>
+          <p class="staff-error" id="staffMsg" role="status"></p>
+          <div class="user-list" id="userList"></div>
+        </div>
+
+        <!-- Reports/Bans: reports to decide on, and who's banned / timed out / warned -->
+        <div class="staff-view" data-view="reports" hidden>
+          <p class="staff-error" id="reportsMsg" role="status"></p>
+          <h2 class="mod-title">Open reports <span class="mod-count" id="openCount"></span></h2>
+          <div class="mod-list" id="openReports"></div>
+          <h2 class="mod-title">Banned <span class="mod-count" id="bannedCount"></span></h2>
+          <div class="mod-list" id="bannedList"></div>
+          <h2 class="mod-title">Timed out <span class="mod-count" id="timeoutCount"></span></h2>
+          <div class="mod-list" id="timeoutList"></div>
+          <h2 class="mod-title">Warned <span class="mod-count" id="warnedCount"></span></h2>
+          <div class="mod-list" id="warnedList"></div>
+          <details class="mod-closed">
+            <summary>Closed reports <span class="mod-count" id="closedCount"></span></summary>
+            <div class="mod-list" id="closedReports"></div>
+          </details>
+        </div>
+
+        <!-- Broadcasts: a message that pops up on everyone's screen -->
+        <div class="staff-view" data-view="broadcasts" hidden>
+          <form class="broadcast-form" id="broadcastForm" autocomplete="off">
+            <p class="history-hint">Pops up on everyone's screen within 10 seconds, with your name and role, for 5 seconds.</p>
+            <textarea id="broadcastText" maxlength="300" placeholder="Type a message for everyone..." aria-label="Broadcast message"></textarea>
+            <div class="broadcast-send">
+              <span class="users-count" id="broadcastCount">0/300</span>
+              <button type="submit" class="button small" id="broadcastSend">Broadcast</button>
+            </div>
+          </form>
+          <p class="staff-error" id="broadcastMsg" role="status"></p>
+          <h2 class="mod-title">Sent broadcasts <span class="mod-count" id="sentCount"></span></h2>
+          <div class="mod-list" id="sentBroadcasts"></div>
+        </div>
+
+        <!-- Admin Abuse (Owner only): music, screen effects and sound effects for everyone -->
+        <div class="staff-view" data-view="abuse" hidden>
+          <p class="history-hint">Owner only. Everyone on the site sees and hears it within 10 seconds. One song plays at a time; effects stack.</p>
+          <p class="staff-error" id="abuseMsg" role="status"></p>
+          <h2 class="mod-title">Music</h2>
+          <div class="abuse-grid" id="abuseMusic"></div>
+          <h2 class="mod-title">Effects</h2>
+          <div class="abuse-grid" id="abuseEffects"></div>
+          <h2 class="mod-title">Sound Effects</h2>
+          <div class="abuse-grid" id="abuseSounds"></div>
+          <h2 class="mod-title">Stop/Start</h2>
+          <div class="abuse-grid" id="abuseControls"></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- History: little tab on the side that slides out a list of every staff action -->
+    <button type="button" class="rulebook-tab history-tab" id="historyOpen" aria-label="Open history" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><path d="M12 7v5l3 2"/>
+      </svg>
+      <span>HISTORY</span>
+    </button>
+    <aside class="history-panel" id="historyPanel" hidden aria-label="History">
+      <div class="history-head">
+        <h2>History</h2>
+        <button type="button" class="tab" id="historyClose">CLOSE</button>
+      </div>
+      <p class="history-hint">Every staff action, newest first. UNDO puts things back the way they were.</p>
+      <p class="staff-error" id="historyMsg" role="status"></p>
+      <div class="history-list" id="historyList"></div>
+    </aside>
+
+    <!-- Pop-up used by the staff actions (warn, ban, rename...) -->
+    <div class="modal-backdrop" id="staffModal" hidden>
+      <form class="modal-box" id="modalForm">
+        <h2 id="modalTitle"></h2>
+        <p class="modal-text" id="modalText"></p>
+        <div class="login-form" id="modalFields"></div>
+        <p class="staff-error" id="modalError" role="alert"></p>
+        <div class="modal-actions">
+          <button type="button" class="tab" id="modalCancel">CANCEL</button>
+          <button type="submit" class="button small" id="modalOk">OK</button>
+        </div>
+      </form>
+    </div>
+  </template>
+
+  <script src="/site.js?v=1"></script>
+</body>
+</html>

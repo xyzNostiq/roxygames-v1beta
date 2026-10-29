@@ -1,0 +1,12 @@
+.netlify
+node_modules
+dist
+.env*
+
+# Netlify / server files: kept on this computer (the live site needs them),
+# but not on GitHub, because the server code has the staff code in it
+netlify/
+netlify.toml
+build.mjs
+package.json
+package-lock.json
