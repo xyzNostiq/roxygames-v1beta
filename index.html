@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Roxy Games</title>
-  <link rel="stylesheet" href="/style.css?v=48">
+  <link rel="stylesheet" href="style.css?v=49">
 </head>
 <body>
   <!-- Every page of Roxy Games is in this one file. Each <template> below belongs to
@@ -22,16 +22,16 @@
   <template data-page="home games play chat ai">
     <header class="site-header">
       <nav class="tabs">
-        <a href="/" class="tab" data-tab="home">HOME</a>
-        <a href="/games" class="tab" data-tab="games">GAMES</a>
-        <a href="/chat" class="tab" data-tab="chat">CHAT</a>
-        <a href="/ai" class="tab" data-tab="ai">AI</a>
+        <a href="./" class="tab" data-tab="home">HOME</a>
+        <a href="games" class="tab" data-tab="games">GAMES</a>
+        <a href="chat" class="tab" data-tab="chat">CHAT</a>
+        <a href="ai" class="tab" data-tab="ai">AI</a>
       </nav>
     </header>
 
     <!-- Top-right corner: account button (added by site.js) and staff notepad -->
     <div class="top-right">
-      <a href="/staff" class="icon-btn staff-btn" aria-label="Staff Panel" title="Staff Panel">
+      <a href="staff" class="icon-btn staff-btn" aria-label="Staff Panel" title="Staff Panel">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
           <rect x="5" y="4" width="14" height="17" rx="2"/>
           <path d="M8.5 2.5v3M12 2.5v3M15.5 2.5v3"/>
@@ -43,7 +43,7 @@
 
   <!-- ===== Exit door: back to the front page (account settings + staff panel) ===== -->
   <template data-page="account staff">
-    <a href="/" class="icon-btn exit-btn" aria-label="Exit to front page" title="Exit">
+    <a href="./" class="icon-btn exit-btn" aria-label="Exit to front page" title="Exit">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
         <path d="M13 4H6a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h7"/>
         <path d="M13 4v16"/>
@@ -86,7 +86,7 @@
   <!-- ===== Play (one game) ===== -->
   <template data-page="play">
     <main class="player">
-      <a href="/games" class="back-link">&larr; All games</a>
+      <a href="games" class="back-link">&larr; All games</a>
       <h1 class="player-title" id="gameTitle">Game</h1>
 
       <div class="player-frame" id="playerFrame">
@@ -165,7 +165,7 @@
           </div>
           <h2>Coming Soon</h2>
           <p>Our AI helper is still being built. Check back later to chat with it, ask questions and share pictures!</p>
-          <a href="/games" class="button small">Play some games</a>
+          <a href="games" class="button small">Play some games</a>
         </div>
 
         <div class="chat-box">
@@ -346,7 +346,7 @@
       <section class="staff-login" id="staffOnly" hidden>
         <h1>Staff Panel</h1>
         <p class="staff-only-text">Only staff can open the Staff Panel.</p>
-        <a href="/" class="button small">Back to Roxy Games</a>
+        <a href="./" class="button small">Back to Roxy Games</a>
       </section>
 
       <!-- Code entry (checked by the server, together with your staff role) -->
@@ -473,6 +473,6 @@
     </div>
   </template>
 
-  <script src="/site.js?v=1"></script>
+  <script src="site.js?v=2"></script>
 </body>
 </html>

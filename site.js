@@ -85,7 +85,7 @@ if (typeof document !== "undefined") {
     home: "Roxy Games", games: "Games - Roxy Games", play: "Play - Roxy Games", chat: "Chat - Roxy Games", ai: "AI - Roxy Games",
     login: "Sign In - Roxy Games", account: "Account - Roxy Games", banned: "Banned - Roxy Games", staff: "Staff Panel - Roxy Games",
   };
-  // "/chat" and the old "/chat.html" both mean the chat page
+  // "/chat" and the old "/chat.html" both mean the chat page (so does /roxygames-v1beta/chat on GitHub Pages)
   const PAGE = (() => {
     const name = location.pathname.split("/").pop().replace(/\.html$/, "");
     return PAGES.includes(name) ? name : "home";
@@ -851,7 +851,7 @@ if (typeof document !== "undefined") {
     // Only allow going back to one of this site's own pages after signing in
     function safeNext(value) {
       const m = /^([a-z]*)(\?[\w=&%.-]*)?$/.exec(value || "");
-      return m && (m[1] === "" || (PAGES.includes(m[1]) && !["login", "banned"].includes(m[1]))) ? "/" + value : "/";
+      return m && (m[1] === "" || (PAGES.includes(m[1]) && !["login", "banned"].includes(m[1]))) ? "./" + value : "./";
     }
 
     function currentPage() {
@@ -859,7 +859,7 @@ if (typeof document !== "undefined") {
     }
 
     function goToLogin() {
-      location.replace(`/login?next=${encodeURIComponent(currentPage())}`);
+      location.replace(`login?next=${encodeURIComponent(currentPage())}`);
     }
 
     // Send signed-out visitors to the sign-in page before the page shows
@@ -869,12 +869,16 @@ if (typeof document !== "undefined") {
     }
 
     // ----- Talking to the server -----
+    // The server runs on Netlify. The GitHub Pages copy of the site (xyznostiq.github.io)
+    // has no server of its own, so it talks to the Netlify one (same accounts, same chat).
+    const API_BASE = location.hostname.endsWith("github.io") ? "https://roxygames-v1beta.netlify.app" : "";
+
     // Throws an Error with a message to show when something's wrong
     async function request(method, path, body, headers = {}) {
       const s = session();
       let res;
       try {
-        res = await fetch(path, {
+        res = await fetch(API_BASE + path, {
           method,
           headers: { ...(body ? { "Content-Type": "application/json" } : {}), ...(s ? { Authorization: `Bearer ${s.token}` } : {}), ...headers },
           body: body ? JSON.stringify(body) : undefined,
@@ -890,7 +894,7 @@ if (typeof document !== "undefined") {
         if (!onLoginPage) goToLogin();
       }
       // Banned or timed out
-      if (res.status === 403 && data.code === "blocked" && !onBanPage) location.replace("/banned");
+      if (res.status === 403 && data.code === "blocked" && !onBanPage) location.replace("banned");
 
       if (!res.ok) {
         const err = new Error(data.error || "Something went wrong. Please try again.");
@@ -925,7 +929,7 @@ if (typeof document !== "undefined") {
     async function signOut() {
       try { await request("POST", "/api/logout", {}); } catch (e) {}
       endSession();
-      location.href = REQUIRE_LOGIN ? "/login" : location.href;
+      location.href = REQUIRE_LOGIN ? "login" : location.href;
     }
 
     // For the ban screen: the ban / timeout details, or null once it's over
@@ -1161,7 +1165,7 @@ if (typeof document !== "undefined") {
         btn.title = "Sign in";
         btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>';
         btn.addEventListener("click", () => {
-          location.href = `/login?next=${encodeURIComponent(currentPage())}`;
+          location.href = `login?next=${encodeURIComponent(currentPage())}`;
         });
         wrap.appendChild(btn);
         corner.prepend(wrap);
@@ -1186,7 +1190,7 @@ if (typeof document !== "undefined") {
       name.className = "account-name";
       name.appendChild(nameTag(user.name, user.role, user.badges));
       const settings = document.createElement("a");
-      settings.href = "/account";
+      settings.href = "account";
       settings.className = "tab";
       settings.textContent = "ACCOUNT SETTINGS";
       const out = document.createElement("button");
@@ -1217,7 +1221,7 @@ if (typeof document !== "undefined") {
       try {
         const before = JSON.stringify(getUser());
         const data = await request("GET", "/api/me");
-        if (data.blocked) return location.replace("/banned");
+        if (data.blocked) return location.replace("banned");
         saveUser(data.user);
         if (JSON.stringify(data.user) !== before) return location.reload();
         showWarnings(data.warnings);
@@ -1451,7 +1455,7 @@ if (typeof document !== "undefined") {
     function card(game) {
       const a = document.createElement("a");
       a.className = "game-card";
-      a.href = `/play?id=${encodeURIComponent(game.id)}`;
+      a.href = `play?id=${encodeURIComponent(game.id)}`;
 
       const thumb = document.createElement("div");
       thumb.className = "game-thumb";
@@ -2200,7 +2204,7 @@ if (typeof document !== "undefined") {
         const { blocked } = mode === "signin"
           ? await Auth.signIn(username.value, password.value)
           : await Auth.signUp(username.value, password.value);
-        location.href = blocked ? "/banned" : next; // banned or timed out -> ban screen
+        location.href = blocked ? "banned" : next; // banned or timed out -> ban screen
       } catch (err) {
         error.textContent = err.message;
         form.classList.remove("shake");
@@ -2213,7 +2217,7 @@ if (typeof document !== "undefined") {
 
   // ==================== Account settings page ====================
   if (PAGE === "account") (() => {
-    if (!Auth.getUser()) return location.replace("/login?next=account");
+    if (!Auth.getUser()) return location.replace("login?next=account");
 
     // Shows a message under a section: red for problems, green when it worked
     function say(el, text, ok) {
@@ -2335,7 +2339,7 @@ if (typeof document !== "undefined") {
       return `${m}m ${s % 60}s`;
     }
 
-    if (!Auth.getUser()) return location.replace("/login");
+    if (!Auth.getUser()) return location.replace("login");
     let status = null;
 
     // Asks the server every few seconds: shows the ban, and goes back
@@ -2352,7 +2356,7 @@ if (typeof document !== "undefined") {
         title.textContent = "You're Free!";
         document.body.classList.remove("ban-page");
         document.getElementById("banDone").textContent = "Your ban or timeout is over. Taking you back...";
-        setTimeout(() => location.replace("/"), 1500);
+        setTimeout(() => location.replace("./"), 1500);
         return;
       }
       draw();
