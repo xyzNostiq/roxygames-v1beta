@@ -871,7 +871,7 @@ if (typeof document !== "undefined") {
     // ----- Talking to the server -----
     // The server runs on Netlify. The GitHub Pages copy of the site (xyznostiq.github.io)
     // has no server of its own, so it talks to the Netlify one (same accounts, same chat).
-    const API_BASE = location.hostname.endsWith("github.io") ? "https://roxygames-v1beta.netlify.app" : "";
+    const API_BASE = location.hostname.endsWith("github.io") ? "https://publichost-57396-testbeta.netlify.app" : "";
 
     // Throws an Error with a message to show when something's wrong
     async function request(method, path, body, headers = {}) {
