@@ -108,10 +108,33 @@ if (typeof document !== "undefined") {
   //   thumb:    picture for the card, kept in the thumbs folder ("" to use the plain placeholder)
   // Categories with no games are hidden automatically.
 
-  const CATEGORIES = ["Puzzle", "Arcade", "Action", "Adventure", "Strategy", "Idle", "Sandbox", "Cards"];
+  const CATEGORIES = [".io", "Arcade", "Action", "Driving", "Shooting", "Sports", "Puzzle", "Adventure", "Strategy", "Idle", "Sandbox", "Cards"];
 
   const GAMES = [
     { id: "slope", title: "Slope", category: "Action", embed: "https://storage.y8.com/y8-studio/unity_webgl/Gani/slope_2026_v2/", thumb: "thumbs/slope.webp" },
+
+    // The 20 most played games on CrazyGames (added with permission), most played first.
+    // CrazyGames lets these be shown on other sites through their /embed/ address.
+    { id: "bloxdhop-io", title: "Bloxd.io", category: ".io", embed: "https://www.crazygames.com/embed/bloxdhop-io", thumb: "thumbs/bloxdhop-io.webp" },
+    { id: "space-waves", title: "Space Waves", category: "Arcade", embed: "https://www.crazygames.com/embed/space-waves", thumb: "thumbs/space-waves.webp" },
+    { id: "ragdoll-archers", title: "Ragdoll Archers", category: "Arcade", embed: "https://www.crazygames.com/embed/ragdoll-archers", thumb: "thumbs/ragdoll-archers.webp" },
+    { id: "racing-limits", title: "Racing Limits", category: "Driving", embed: "https://www.crazygames.com/embed/racing-limits", thumb: "thumbs/racing-limits.webp" },
+    { id: "shellshockersio", title: "Shell Shockers", category: ".io", embed: "https://www.crazygames.com/embed/shellshockersio", thumb: "thumbs/shellshockersio.webp" },
+    { id: "smash-karts", title: "Smash Karts", category: ".io", embed: "https://www.crazygames.com/embed/smash-karts", thumb: "thumbs/smash-karts.webp" },
+    { id: "buildnow-gg", title: "BuildNow GG", category: "Shooting", embed: "https://www.crazygames.com/embed/buildnow-gg", thumb: "thumbs/buildnow-gg.webp" },
+    { id: "slice-master", title: "Slice Master", category: "Arcade", embed: "https://www.crazygames.com/embed/slice-master", thumb: "thumbs/slice-master.webp" },
+    { id: "traffic-rider-vvq", title: "Traffic Rider", category: "Driving", embed: "https://www.crazygames.com/embed/traffic-rider-vvq", thumb: "thumbs/traffic-rider-vvq.webp" },
+    { id: "count-masters-stickman-games", title: "Count Masters: Stickman Games", category: "Arcade", embed: "https://www.crazygames.com/embed/count-masters-stickman-games", thumb: "thumbs/count-masters-stickman-games.webp" },
+    { id: "8-ball-billiards-classic", title: "8 Ball Billiards Classic", category: "Sports", embed: "https://www.crazygames.com/embed/8-ball-billiards-classic", thumb: "thumbs/8-ball-billiards-classic.webp" },
+    { id: "bullet-force-multiplayer", title: "Bullet Force", category: "Shooting", embed: "https://www.crazygames.com/embed/bullet-force-multiplayer", thumb: "thumbs/bullet-force-multiplayer.webp" },
+    { id: "geometry-dash-online", title: "Geometry Game", category: "Arcade", embed: "https://www.crazygames.com/embed/geometry-dash-online", thumb: "thumbs/geometry-dash-online.webp" },
+    { id: "cubes-2048-io", title: "Cubes 2048.io", category: ".io", embed: "https://www.crazygames.com/embed/cubes-2048-io", thumb: "thumbs/cubes-2048-io.webp" },
+    { id: "rally-racer-dirt", title: "Rally Racer Dirt", category: "Driving", embed: "https://www.crazygames.com/embed/rally-racer-dirt", thumb: "thumbs/rally-racer-dirt.webp" },
+    { id: "piece-of-cake-merge-and-bake", title: "Piece of Cake: Merge and Bake", category: "Puzzle", embed: "https://www.crazygames.com/embed/piece-of-cake-merge-and-bake", thumb: "thumbs/piece-of-cake-merge-and-bake.webp" },
+    { id: "sky-riders-buk", title: "Sky Riders", category: "Driving", embed: "https://www.crazygames.com/embed/sky-riders-buk", thumb: "thumbs/sky-riders-buk.webp" },
+    { id: "mahjongg-solitaire", title: "Mahjongg Solitaire", category: "Puzzle", embed: "https://www.crazygames.com/embed/mahjongg-solitaire", thumb: "thumbs/mahjongg-solitaire.webp" },
+    { id: "miniblox", title: "Miniblox", category: ".io", embed: "https://www.crazygames.com/embed/miniblox", thumb: "thumbs/miniblox.webp" },
+    { id: "basket-random", title: "Basket Random", category: "Sports", embed: "https://www.crazygames.com/embed/basket-random", thumb: "thumbs/basket-random.webp" },
   ];
 
   // ==================== Admin Abuse (music, screen effects, sound effects) ====================
