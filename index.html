@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Roxy Games</title>
-  <link rel="stylesheet" href="style.css?v=49">
+  <link rel="stylesheet" href="style.css?v=50">
 </head>
 <body>
   <!-- Every page of Roxy Games is in this one file. Each <template> below belongs to
@@ -188,6 +188,17 @@
           </form>
           <p class="staff-error chat-error" id="aiError" role="alert"></p>
         </div>
+      </section>
+    </main>
+  </template>
+
+  <!-- ===== Site code (shows site.js) ===== -->
+  <template data-page="code">
+    <main>
+      <section class="chat-page">
+        <h1>Site code</h1>
+        <p class="ai-note">This is the code that runs Roxy Games (site.js). <a href="site.js" target="_blank">Open it on its own</a>.</p>
+        <pre class="code-view" id="codeView">Loading...</pre>
       </section>
     </main>
   </template>
@@ -473,6 +484,6 @@
     </div>
   </template>
 
-  <script src="site.js?v=4"></script>
+  <script src="site.js?v=5"></script>
 </body>
 </html>

@@ -80,10 +80,10 @@ if (typeof document !== "undefined") {
   // ==================== Which page is this? ====================
   // Every page is in index.html, inside <template>s. The address (/, /games, /chat,
   // /staff...) picks the page; only its templates are put into the page.
-  const PAGES = ["home", "games", "play", "chat", "ai", "login", "account", "banned", "staff"];
+  const PAGES = ["home", "games", "play", "chat", "ai", "login", "account", "banned", "staff", "code"];
   const TITLES = {
     home: "Roxy Games", games: "Games - Roxy Games", play: "Play - Roxy Games", chat: "Chat - Roxy Games", ai: "AI - Roxy Games",
-    login: "Sign In - Roxy Games", account: "Account - Roxy Games", banned: "Banned - Roxy Games", staff: "Staff Panel - Roxy Games",
+    login: "Sign In - Roxy Games", account: "Account - Roxy Games", banned: "Banned - Roxy Games", staff: "Staff Panel - Roxy Games", code: "Site code - Roxy Games",
   };
   // "/chat" and the old "/chat.html" both mean the chat page (so does /roxygames-v1beta/chat on GitHub Pages)
   const PAGE = (() => {
@@ -3233,5 +3233,16 @@ if (typeof document !== "undefined") {
     });
 
     form.addEventListener("submit", (e) => e.preventDefault());
+  })();
+
+  // ==================== Site code page ====================
+  // Shows this file, so anyone can read how the website works
+  if (PAGE === "code") (async () => {
+    const view = document.getElementById("codeView");
+    try {
+      view.textContent = await (await fetch("site.js")).text();
+    } catch (e) {
+      view.textContent = "Couldn't load the code. Try again.";
+    }
   })();
 }
