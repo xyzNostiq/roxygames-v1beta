@@ -2087,6 +2087,18 @@ footer.copyright {
   color: var(--text);
 }
 
+/* Site code page: shows site.js */
+.code-view {
+  max-height: 70vh;
+  overflow: auto;
+  padding: 1rem;
+  font-size: 0.8rem;
+  white-space: pre;
+  background: rgba(10, 9, 18, 0.6);
+  border: 1px solid rgba(180, 180, 191, 0.15);
+  border-radius: var(--radius);
+}
+
 /* Footer */
 .site-footer {
   text-align: center;
